@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,26 +73,28 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-      return view == ((ImageView) object);
+      return view == ((LinearLayout) object);
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
       Context context = MainActivity.this;
+        LinearLayout linearLayout = new LinearLayout(context);
       ImageView imageView = new ImageView(context);
       int padding = context.getResources().getDimensionPixelSize(
           R.dimen.padding_medium);
       imageView.setPadding(padding, padding, padding, padding);
       imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
       imageView.setImageResource(mImages2.get(position));
-      ((ViewPager) container).addView(imageView, 0);
-      return imageView;
+        linearLayout.addView(imageView);
+      ((ViewPager) container).addView(linearLayout, 0);
+      return linearLayout;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         Log.i("destroy", Integer.toString(position));
-      ((ViewPager) container).removeView((ImageView) object);
+      ((ViewPager) container).removeView((LinearLayout) object);
     }
   }
 }
