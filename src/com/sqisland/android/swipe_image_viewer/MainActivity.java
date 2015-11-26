@@ -2,6 +2,7 @@ package com.sqisland.android.swipe_image_viewer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ public class MainActivity extends Activity {
         @Override
         public void onPageSelected(int i) {
             Log.i("selected", Integer.toString(i));
-            adapter.mImages2.add(R.drawable.ulm);
+            adapter.mImages2.add(new WallpaperItem(R.drawable.ulm, "ulm"));
             adapter.notifyDataSetChanged();
 
         }
@@ -50,12 +52,22 @@ public class MainActivity extends Activity {
         }
     };
 
+    private class WallpaperItem {
+        public WallpaperItem(Integer image, String title) {
+            this.image = image;
+            this.title = title;
+        }
+
+        public Integer image;
+        public String title;
+    }
+
   private class ImagePagerAdapter extends PagerAdapter {
-      private List<Integer> mImages2 = new ArrayList<>();
+      private List<WallpaperItem> mImages2 = new ArrayList<>();
 
       public ImagePagerAdapter() {
-          mImages2.add(R.drawable.chiang_mai);
-          mImages2.add(R.drawable.chiang_mai);
+          mImages2.add(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
+          mImages2.add(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
       }
 
 
@@ -80,13 +92,19 @@ public class MainActivity extends Activity {
     public Object instantiateItem(ViewGroup container, int position) {
       Context context = MainActivity.this;
         LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
       ImageView imageView = new ImageView(context);
       int padding = context.getResources().getDimensionPixelSize(
           R.dimen.padding_medium);
       imageView.setPadding(padding, padding, padding, padding);
       imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-      imageView.setImageResource(mImages2.get(position));
+        WallpaperItem wallpaperItem = mImages2.get(position);
+      imageView.setImageResource(wallpaperItem.image);
         linearLayout.addView(imageView);
+      TextView textView = new TextView(context);
+        textView.setText(wallpaperItem.title);
+        textView.setTextColor(Color.RED);
+        linearLayout.addView(textView);
       ((ViewPager) container).addView(linearLayout, 0);
       return linearLayout;
     }
