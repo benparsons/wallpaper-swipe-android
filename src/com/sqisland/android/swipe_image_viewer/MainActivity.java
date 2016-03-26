@@ -52,16 +52,6 @@ public class MainActivity extends Activity {
         }
     };
 
-    private class WallpaperItem {
-        public WallpaperItem(Integer image, String title) {
-            this.image = image;
-            this.title = title;
-        }
-
-        public Integer image;
-        public String title;
-    }
-
   private class ImagePagerAdapter extends PagerAdapter {
       private List<WallpaperItem> mImages2 = new ArrayList<>();
 
