@@ -43,9 +43,17 @@ public class MainActivity extends Activity {
         public void onPageSelected(int i) {
             Log.i("selected", Integer.toString(i));
             adapter.mImages2.add(new WallpaperItem(R.drawable.ulm, "ulm"));
+            JSONObject json = new JSONObject();
             adapter.notifyDataSetChanged();
-
-            JSONObject json = GetJson.GetJson("http://localhost:4000/sample.json");
+            try {
+                String url = "http://localhost:4000/sample.json";
+                //String url = "http://jsonplaceholder.typicode.com/users";
+                json = new GetJsonTask().execute(url).get();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
             Log.i("json", json.toString());
         }
 
