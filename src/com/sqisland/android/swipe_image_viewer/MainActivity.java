@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,8 @@ public class MainActivity extends Activity {
             adapter.mImages2.add(new WallpaperItem(R.drawable.ulm, "ulm"));
             adapter.notifyDataSetChanged();
 
+            JSONObject json = GetJson.GetJson("http://localhost:4000/sample.json");
+            Log.i("json", json.toString());
         }
 
         @Override
