@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onPageSelected(int i) {
-            Log.i("selected", Integer.toString(i));
+            //Log.i("selected", Integer.toString(i));
             adapter.mImages2.add(new WallpaperItem(R.drawable.ulm, "ulm"));
             JSONObject json = new JSONObject();
             adapter.notifyDataSetChanged();
@@ -93,9 +93,20 @@ public class MainActivity extends Activity {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+      Log.i("position:", Integer.toString(position));
       Context context = MainActivity.this;
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+      if (position > 3) {
+        TextView title = new TextView(context);
+        title.setText("test text");
+        title.setTextColor(Color.WHITE);
+        linearLayout.addView(title);
+        ((ViewPager) container).addView(linearLayout, 0);
+        return linearLayout;
+      }
+
       ImageView imageView = new ImageView(context);
       int padding = context.getResources().getDimensionPixelSize(
           R.dimen.padding_medium);
