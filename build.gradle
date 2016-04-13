@@ -9,16 +9,27 @@ buildscript {
 
 apply plugin: 'com.android.application'
 
+allprojects {
+  repositories {
+    jcenter()
+  }
+}
+
 dependencies {
   compile 'com.android.support:support-v4:21.0.3'
+  compile 'com.facebook.android:audience-network-sdk:4.10.1'
+
 }
 
 android {
-  compileSdkVersion 21
+  compileSdkVersion 23
   buildToolsVersion "21.1.2"
 
+  useLibrary 'org.apache.http.legacy'
+
+
   defaultConfig {
-    minSdkVersion 4
+    minSdkVersion 11
     targetSdkVersion 21
   }
 
