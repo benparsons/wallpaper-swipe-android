@@ -46,7 +46,8 @@ public class MainActivity extends Activity {
             JSONObject json = new JSONObject();
             adapter.notifyDataSetChanged();
             try {
-                String url = "http://localhost:4000/sample.json";
+                String url = "http://safe-fjord-67306.herokuapp.com/sample.json";
+                //String url = "http://localhost:4000/sample.json";
                 //String url = "http://jsonplaceholder.typicode.com/users";
                 json = new GetJsonTask().execute(url).get();
             }
