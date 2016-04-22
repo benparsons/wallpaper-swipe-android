@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -47,19 +48,21 @@ public class ImagePagerAdapter extends PagerAdapter {
             return view;
         }
 
-        View wallpaperPage = inflater.inflate(R.layout.wallpaper_page, null);
+        final View wallpaperPage = inflater.inflate(R.layout.wallpaper_page, null);
         ImageView imageView = (ImageView)wallpaperPage.findViewById(R.id.ivWallpaper);
 
         int padding = context.getResources().getDimensionPixelSize(
                 R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        WallpaperItem wallpaperItem = mImages2.get(position);
+        final WallpaperItem wallpaperItem = mImages2.get(position);
         imageView.setImageResource(wallpaperItem.image);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("ui", "image clicked");
+                TableLayout table = (TableLayout)wallpaperPage.findViewById(R.id.tableDetails);
+                table.setVisibility(View.VISIBLE);
             }
         });
         TextView textView = (TextView)wallpaperPage.findViewById(R.id.tvTitle);
