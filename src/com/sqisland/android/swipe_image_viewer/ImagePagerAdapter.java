@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,21 +17,15 @@ import java.util.List;
 
 public class ImagePagerAdapter extends PagerAdapter {
     Context context;
+    LayoutInflater inflater;
     public List<WallpaperItem> mImages2 = new ArrayList<>();
 
     public ImagePagerAdapter(Context _context) {
         context = _context;
+        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mImages2.add(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
         mImages2.add(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
     }
-
-
-    private int[] mImages = new int[] {
-            R.drawable.chiang_mai,
-            R.drawable.himeji,
-            R.drawable.petronas_twin_tower,
-            R.drawable.ulm
-    };
 
     @Override
     public int getCount() {
@@ -45,32 +40,34 @@ public class ImagePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         Log.i("position:", Integer.toString(position));
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         if (position > 3) {
-            TextView title = new TextView(context);
-            title.setText("test text");
-            title.setTextColor(Color.WHITE);
-            linearLayout.addView(title);
-            ((ViewPager) container).addView(linearLayout, 0);
-            return linearLayout;
+            View view = inflater.inflate(R.layout.simple_text, null);
+            ((ViewPager) container).addView(view, 0);
+            return view;
         }
 
-        ImageView imageView = new ImageView(context);
+        View wallpaperPage = inflater.inflate(R.layout.wallpaper_page, null);
+        ImageView imageView = (ImageView)wallpaperPage.findViewById(R.id.ivWallpaper);
+
         int padding = context.getResources().getDimensionPixelSize(
                 R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         WallpaperItem wallpaperItem = mImages2.get(position);
         imageView.setImageResource(wallpaperItem.image);
-        linearLayout.addView(imageView);
-        TextView textView = new TextView(context);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("ui", "image clicked");
+            }
+        });
+        TextView textView = (TextView)wallpaperPage.findViewById(R.id.tvTitle);
         textView.setText(wallpaperItem.title);
         textView.setTextColor(Color.RED);
-        linearLayout.addView(textView);
-        ((ViewPager) container).addView(linearLayout, 0);
-        return linearLayout;
+
+        ((ViewPager) container).addView(wallpaperPage, 0);
+        return wallpaperPage;
     }
 
     @Override

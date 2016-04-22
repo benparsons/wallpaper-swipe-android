@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
-  ImagePagerAdapter adapter = new ImagePagerAdapter(MainActivity.this);
+  ImagePagerAdapter adapter;
   ViewPager viewPager;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    adapter = new ImagePagerAdapter(MainActivity.this);
     //setContentView(R.layout.activity_main);
 
     viewPager = new ViewPager(this);
