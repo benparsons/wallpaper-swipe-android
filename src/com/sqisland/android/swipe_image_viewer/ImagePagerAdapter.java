@@ -1,5 +1,6 @@
 package com.sqisland.android.swipe_image_viewer;
 
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -71,8 +73,27 @@ public class ImagePagerAdapter extends PagerAdapter {
         textView.setText(wallpaperItem.title);
         textView.setTextColor(Color.RED);
 
+        enableSetWallpaperButton(wallpaperPage, wallpaperItem);
+
         ((ViewPager) container).addView(wallpaperPage, 0);
         return wallpaperPage;
+    }
+
+    private void enableSetWallpaperButton(View wallpaperPage, final WallpaperItem wallpaperItem) {
+        Button btnSetWallpaper = (Button)wallpaperPage.findViewById(R.id.btnSetWallpaper);
+        btnSetWallpaper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WallpaperManager myWallpaperManager = WallpaperManager.getInstance(context);
+                try {
+                    myWallpaperManager.setResource(wallpaperItem.image);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     @Override
