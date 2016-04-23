@@ -29,6 +29,7 @@ android {
 
 
   defaultConfig {
+    applicationId "org.bpulse.wallpaper"
     minSdkVersion 11
     targetSdkVersion 21
   }
