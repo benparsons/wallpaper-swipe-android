@@ -1,4 +1,4 @@
-package com.sqisland.android.swipe_image_viewer;
+package org.bpulse.wallpaper;
 
 /**
  * Created by ben on 26/03/2016.

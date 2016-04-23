@@ -1,4 +1,4 @@
-package com.sqisland.android.swipe_image_viewer;
+package org.bpulse.wallpaper;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +21,7 @@ import java.util.List;
 public class MainActivity extends Activity {
   ImagePagerAdapter adapter;
   ViewPager viewPager;
+  final String URL_ROOT = "https://s3-eu-west-1.amazonaws.com/flickrwall/";
 
   @Override
   public void onCreate(Bundle savedInstanceState) {

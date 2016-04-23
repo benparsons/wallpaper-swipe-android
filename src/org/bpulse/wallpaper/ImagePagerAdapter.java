@@ -1,4 +1,4 @@
-package com.sqisland.android.swipe_image_viewer;
+package org.bpulse.wallpaper;
 
 import android.app.WallpaperManager;
 import android.content.Context;
