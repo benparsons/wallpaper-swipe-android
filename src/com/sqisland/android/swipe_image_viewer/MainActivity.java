@@ -27,6 +27,11 @@ public class MainActivity extends Activity {
     super.onCreate(savedInstanceState);
 
     adapter = new ImagePagerAdapter(MainActivity.this);
+
+    adapter.addWallpaperItem(new WallpaperItem(R.drawable.ulm, "ulm"));
+    adapter.addWallpaperItem(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
+    adapter.addWallpaperItem(new WallpaperItem(R.drawable.himeji, "himeji"));
+    adapter.addWallpaperItem(new WallpaperItem(R.drawable.petronas_twin_tower, "petronas_twin_tower"));
     //setContentView(R.layout.activity_main);
 
     viewPager = new ViewPager(this);
@@ -48,7 +53,7 @@ public class MainActivity extends Activity {
         @Override
         public void onPageSelected(int i) {
             //Log.i("selected", Integer.toString(i));
-            adapter.mImages2.add(new WallpaperItem(R.drawable.ulm, "ulm"));
+
             JSONObject json = new JSONObject();
             adapter.notifyDataSetChanged();
             try {

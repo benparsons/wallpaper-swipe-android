@@ -19,13 +19,15 @@ import java.util.List;
 public class ImagePagerAdapter extends PagerAdapter {
     Context context;
     LayoutInflater inflater;
-    public List<WallpaperItem> mImages2 = new ArrayList<>();
+    private List<WallpaperItem> mImages2 = new ArrayList<>();
 
     public ImagePagerAdapter(Context _context) {
         context = _context;
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mImages2.add(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
-        mImages2.add(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
+    }
+
+    public void addWallpaperItem(WallpaperItem wallpaperItem) {
+        mImages2.add(wallpaperItem);
     }
 
     @Override
