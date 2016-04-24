@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+Log.i("start", "start");
     adapter = new ImagePagerAdapter(MainActivity.this);
 
     adapter.addWallpaperItem(new WallpaperItem(R.drawable.ulm, "ulm"));
@@ -42,10 +42,28 @@ public class MainActivity extends Activity {
 
     viewPager.setAdapter(adapter);
     viewPager.setOnPageChangeListener(listener);
+
+    getNewImageList();
+  }
+
+  private void getNewImageList() {
+    JSONObject json = new JSONObject();
+    try {
+      String url = "http://safe-fjord-67306.herokuapp.com/demo_response.json";
+      //String url = "http://localhost:4000/sample.json";
+      //String url = "http://jsonplaceholder.typicode.com/users";
+      json = new GetJsonTask().execute(url).get();
+
+      Log.i("json", json.toString());
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+    }
   }
 
 
-    ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
+  ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i2) {
             //Log.i("scrolled", i + " " + v + " " + i2);
