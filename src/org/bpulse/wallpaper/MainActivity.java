@@ -1,7 +1,10 @@
 package org.bpulse.wallpaper;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -22,6 +25,16 @@ public class MainActivity extends Activity {
   ImagePagerAdapter adapter;
   ViewPager viewPager;
   final String URL_ROOT = "https://s3-eu-west-1.amazonaws.com/flickrwall/";
+  private BroadcastReceiver receiverDownloadComplete;
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+
+    //receiverDownloadComplete
+  }
+
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +57,8 @@ Log.i("start", "start");
     viewPager.setOnPageChangeListener(listener);
 
     getNewImageList();
+    ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
+    imageDownloader.DownloadImage("https://s3-eu-west-1.amazonaws.com/flickrwall/f947560e-d28b-488a-aceb-c1ec0eae5eab.jpg");
   }
 
   private void getNewImageList() {
