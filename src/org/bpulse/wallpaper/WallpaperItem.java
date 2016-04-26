@@ -10,6 +10,12 @@ public class WallpaperItem {
         this.title = title;
     }
 
+    public WallpaperItem(String localFilePath, String title) {
+        this.localFilePath = localFilePath;
+        this.title = title;
+    }
+
+    public String localFilePath;
     public Integer image;
     public String title;
 }

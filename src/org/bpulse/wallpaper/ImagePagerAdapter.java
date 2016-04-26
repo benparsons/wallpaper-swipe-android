@@ -3,6 +3,7 @@ package org.bpulse.wallpaper;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -46,7 +47,7 @@ public class ImagePagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         Log.i("position:", Integer.toString(position));
 
-        if (position > 3) {
+        if (position > 10) {
             View view = inflater.inflate(R.layout.simple_text, null);
             ((ViewPager) container).addView(view, 0);
             return view;
@@ -60,7 +61,14 @@ public class ImagePagerAdapter extends PagerAdapter {
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         final WallpaperItem wallpaperItem = mImages2.get(position);
+
+      if (wallpaperItem.localFilePath != null) {
+        imageView.setImageURI(Uri.parse(wallpaperItem.localFilePath));
+      }
+      else {
         imageView.setImageResource(wallpaperItem.image);
+      }
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

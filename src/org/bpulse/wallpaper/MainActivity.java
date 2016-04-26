@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -28,19 +30,37 @@ public class MainActivity extends Activity {
   final String URL_ROOT = "https://s3-eu-west-1.amazonaws.com/flickrwall/";
   private BroadcastReceiver receiverDownloadComplete;
 
+  private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      // TODO Auto-generated method stub
+      // Get extra data included in the Intent
+      String message = intent.getStringExtra("message");
+      Log.d("receiver", "Got message: " + message);
+      adapter.addWallpaperItem(new WallpaperItem("file://" + message, "some title"));
+      adapter.notifyDataSetChanged();
+    }
+  };
+
+
   @Override
   public void onResume() {
     super.onResume();
     IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
 
-    //receiverDownloadComplete
+    receiverDownloadComplete = new DownloadReceiver();
+    registerReceiver(this.receiverDownloadComplete, intentFilter);
   }
 
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-Log.i("start", "start");
+
+    LocalBroadcastManager.getInstance(this).registerReceiver(
+            mMessageReceiver, new IntentFilter("file-ready"));
+
+    Log.i("start", "start");
     adapter = new ImagePagerAdapter(MainActivity.this);
 
     adapter.addWallpaperItem(new WallpaperItem(R.drawable.ulm, "ulm"));
@@ -57,9 +77,6 @@ Log.i("start", "start");
     viewPager.setAdapter(adapter);
     viewPager.setOnPageChangeListener(listener);
 
-    getNewImageList();
-    ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
-    imageDownloader.DownloadImage("https://s3-eu-west-1.amazonaws.com/flickrwall/f947560e-d28b-488a-aceb-c1ec0eae5eab.jpg");
   }
 
   private void getNewImageList() {
@@ -92,11 +109,10 @@ Log.i("start", "start");
             JSONArray json;
             adapter.notifyDataSetChanged();
             try {
-                String url = "http://safe-fjord-67306.herokuapp.com/sample.json";
-                //String url = "http://localhost:4000/sample.json";
-                //String url = "http://jsonplaceholder.typicode.com/users";
-                json = new GetJsonTask().execute(url).get();
-                Log.i("json", json.toString());
+              getNewImageList();
+              ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
+              imageDownloader.DownloadImage("https://s3-eu-west-1.amazonaws.com/flickrwall/f947560e-d28b-488a-aceb-c1ec0eae5eab.jpg");
+
             }
             catch(Exception e)
             {
