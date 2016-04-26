@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -62,9 +63,9 @@ Log.i("start", "start");
   }
 
   private void getNewImageList() {
-    JSONObject json = new JSONObject();
+    JSONArray json;
     try {
-      String url = "http://safe-fjord-67306.herokuapp.com/demo_response.json";
+      String url = "https://safe-fjord-67306.herokuapp.com/client-api/get-full-image-list";
       //String url = "http://localhost:4000/sample.json";
       //String url = "http://jsonplaceholder.typicode.com/users";
       json = new GetJsonTask().execute(url).get();
@@ -88,19 +89,19 @@ Log.i("start", "start");
         public void onPageSelected(int i) {
             //Log.i("selected", Integer.toString(i));
 
-            JSONObject json = new JSONObject();
+            JSONArray json;
             adapter.notifyDataSetChanged();
             try {
                 String url = "http://safe-fjord-67306.herokuapp.com/sample.json";
                 //String url = "http://localhost:4000/sample.json";
                 //String url = "http://jsonplaceholder.typicode.com/users";
                 json = new GetJsonTask().execute(url).get();
+                Log.i("json", json.toString());
             }
             catch(Exception e)
             {
                 e.printStackTrace();
             }
-            Log.i("json", json.toString());
         }
 
         @Override

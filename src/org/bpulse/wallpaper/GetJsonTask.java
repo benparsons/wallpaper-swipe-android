@@ -18,10 +18,10 @@ import java.io.InputStreamReader;
 /**
  * Created by ben on 26/03/2016.
  */
-public class GetJsonTask extends AsyncTask<String, Void, JSONObject> {
+public class GetJsonTask extends AsyncTask<String, Void, JSONArray> {
 
     @Override
-    protected JSONObject doInBackground(String... strings) {
+    protected JSONArray doInBackground(String... strings) {
         try {
             String url = strings[0];
 
@@ -45,9 +45,10 @@ public class GetJsonTask extends AsyncTask<String, Void, JSONObject> {
             String json = stringBuffer.toString();
 
             // Instantiate a JSON object from the request response
+            return new JSONArray(json);
             //JSONObject jsonObject = new JSONObject(json);
-            JSONArray jsonArray = new JSONArray(json);
-            return jsonArray.getJSONObject(0);
+            //JSONArray jsonArray = new JSONArray(json);
+            //return jsonArray.getJSONObject(0);
             //return jsonObject;
 
         } catch (Exception e) {
