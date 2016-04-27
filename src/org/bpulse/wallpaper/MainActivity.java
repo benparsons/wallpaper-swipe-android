@@ -28,6 +28,8 @@ public class MainActivity extends Activity {
   ImagePagerAdapter adapter;
   ViewPager viewPager;
   final String URL_ROOT = "https://s3-eu-west-1.amazonaws.com/flickrwall/";
+  JSONArray remoteImageList;
+  int remoteImageIndex = 0;
   private BroadcastReceiver receiverDownloadComplete;
 
   private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -80,14 +82,13 @@ public class MainActivity extends Activity {
   }
 
   private void getNewImageList() {
-    JSONArray json;
     try {
       String url = "https://safe-fjord-67306.herokuapp.com/client-api/get-full-image-list";
       //String url = "http://localhost:4000/sample.json";
       //String url = "http://jsonplaceholder.typicode.com/users";
-      json = new GetJsonTask().execute(url).get();
+      remoteImageList = new GetJsonTask().execute(url).get();
 
-      Log.i("json", json.toString());
+      Log.i("json", remoteImageList.toString());
     }
     catch(Exception e)
     {
@@ -111,7 +112,10 @@ public class MainActivity extends Activity {
             try {
               getNewImageList();
               ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
-              imageDownloader.DownloadImage("https://s3-eu-west-1.amazonaws.com/flickrwall/f947560e-d28b-488a-aceb-c1ec0eae5eab.jpg");
+              String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" +
+                remoteImageList.getJSONObject(remoteImageIndex).getString("filename");
+              imageDownloader.DownloadImage(downloadUrl);
+              remoteImageIndex++;
 
             }
             catch(Exception e)
