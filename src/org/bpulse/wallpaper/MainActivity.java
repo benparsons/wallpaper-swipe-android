@@ -65,10 +65,10 @@ public class MainActivity extends Activity {
     Log.i("start", "start");
     adapter = new ImagePagerAdapter(MainActivity.this);
 
-    adapter.addWallpaperItem(new WallpaperItem(R.drawable.ulm, "ulm"));
-    adapter.addWallpaperItem(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
-    adapter.addWallpaperItem(new WallpaperItem(R.drawable.himeji, "himeji"));
-    adapter.addWallpaperItem(new WallpaperItem(R.drawable.petronas_twin_tower, "petronas_twin_tower"));
+    //adapter.addWallpaperItem(new WallpaperItem(R.drawable.ulm, "ulm"));
+    //adapter.addWallpaperItem(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
+    //adapter.addWallpaperItem(new WallpaperItem(R.drawable.himeji, "himeji"));
+    //adapter.addWallpaperItem(new WallpaperItem(R.drawable.petronas_twin_tower, "petronas_twin_tower"));
     //setContentView(R.layout.activity_main);
 
     viewPager = new ViewPager(this);
@@ -80,6 +80,7 @@ public class MainActivity extends Activity {
     viewPager.setOnPageChangeListener(listener);
 
     getNewImageList();
+    downloadImages(3);
 
   }
 
@@ -98,18 +99,29 @@ public class MainActivity extends Activity {
     }
   }
 
-  private void downloadNextImage() {
-    try {
-      ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
-      String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" +
-              remoteImageList.getJSONObject(remoteImageIndex).getString("filename");
-      imageDownloader.DownloadImage(downloadUrl);
-      remoteImageIndex++;
+  private void downloadImages(int count) {
+    if (count < 1 || count > 10) {
 
+      throw new IllegalArgumentException("must download between 1 and 10 images");
     }
-    catch(Exception e)
-    {
-      e.printStackTrace();
+
+    for (int i = 0; i < count; i++) {
+      if (remoteImageIndex >= remoteImageList.length()) {
+        Log.i("image-loading", "Reached the end of the remote image list. Stopping download attempt.");
+        return;
+      }
+      try {
+        ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
+        String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" +
+                remoteImageList.getJSONObject(remoteImageIndex).getString("filename");
+        imageDownloader.DownloadImage(downloadUrl);
+        remoteImageIndex++;
+
+      }
+      catch(Exception e)
+      {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -124,12 +136,12 @@ public class MainActivity extends Activity {
         public void onPageSelected(int i) {
             //Log.i("selected", Integer.toString(i));
 
-          downloadNextImage();
+          downloadImages(2);
         }
 
         @Override
         public void onPageScrollStateChanged(int i) {
-            Log.i("statechanged", Integer.toString(i));
+            Log.i("image-pager", "PageScrollStateChanged: " + Integer.toString(i));
 
         }
     };

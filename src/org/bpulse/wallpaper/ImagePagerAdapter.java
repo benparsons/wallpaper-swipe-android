@@ -45,7 +45,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Log.i("position:", Integer.toString(position));
+        Log.i("image-pager", "position:" +Integer.toString(position));
 
         if (position > 10) {
             View view = inflater.inflate(R.layout.simple_text, null);
@@ -106,7 +106,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        Log.i("destroy", Integer.toString(position));
+        Log.i("image-pager", "destroy: " + Integer.toString(position));
         ((ViewPager) container).removeView((LinearLayout) object);
     }
 }
