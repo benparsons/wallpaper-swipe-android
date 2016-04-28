@@ -79,6 +79,8 @@ public class MainActivity extends Activity {
     viewPager.setAdapter(adapter);
     viewPager.setOnPageChangeListener(listener);
 
+    getNewImageList();
+
   }
 
   private void getNewImageList() {
@@ -89,6 +91,21 @@ public class MainActivity extends Activity {
       remoteImageList = new GetJsonTask().execute(url).get();
 
       Log.i("json", remoteImageList.toString());
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  private void downloadNextImage() {
+    try {
+      ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
+      String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" +
+              remoteImageList.getJSONObject(remoteImageIndex).getString("filename");
+      imageDownloader.DownloadImage(downloadUrl);
+      remoteImageIndex++;
+
     }
     catch(Exception e)
     {
@@ -107,21 +124,7 @@ public class MainActivity extends Activity {
         public void onPageSelected(int i) {
             //Log.i("selected", Integer.toString(i));
 
-            JSONArray json;
-            adapter.notifyDataSetChanged();
-            try {
-              getNewImageList();
-              ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
-              String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" +
-                remoteImageList.getJSONObject(remoteImageIndex).getString("filename");
-              imageDownloader.DownloadImage(downloadUrl);
-              remoteImageIndex++;
-
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
+          downloadNextImage();
         }
 
         @Override
