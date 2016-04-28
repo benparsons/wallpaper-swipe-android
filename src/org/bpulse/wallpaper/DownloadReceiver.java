@@ -45,7 +45,8 @@ public class DownloadReceiver extends BroadcastReceiver {
           //notify your app that download was completed
           //with local broadcast receiver
           Intent localReceiver = new Intent("file-ready");
-          localReceiver.putExtra("message", downloadedPackageUriString);
+          localReceiver.putExtra("localUrl", downloadedPackageUriString);
+          localReceiver.putExtra("downloadId", downloadId);
           LocalBroadcastManager
                   .getInstance(context)
                   .sendBroadcast(localReceiver);

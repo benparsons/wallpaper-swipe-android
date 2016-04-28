@@ -5,12 +5,16 @@ package org.bpulse.wallpaper;
  */
 public class WallpaperItem {
 
-    public WallpaperItem(Integer image, String title) {
+    public WallpaperItem(String title) {
+        this.title = title;
+    }
+
+    public WallpaperItem(String title, Integer image) {
         this.image = image;
         this.title = title;
     }
 
-    public WallpaperItem(String localFilePath, String title) {
+    public WallpaperItem(String title, String localFilePath) {
         this.localFilePath = localFilePath;
         this.title = title;
     }

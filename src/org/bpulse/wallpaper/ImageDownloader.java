@@ -19,13 +19,14 @@ public class ImageDownloader {
     downloadManager = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
   }
 
-  public void DownloadImage(String url) {
-    DownloadImage(Uri.parse(url));
+  public long DownloadImage(String url) {
+    return DownloadImage(Uri.parse(url));
   }
 
-  public void DownloadImage(Uri uri) {
+  public long DownloadImage(Uri uri) {
     DownloadManager.Request request = new DownloadManager.Request(uri);
     request.setTitle("download title").setDescription("download description");
     myDownloadReference = downloadManager.enqueue(request);
+    return myDownloadReference;
   }
 }

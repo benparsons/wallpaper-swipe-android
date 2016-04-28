@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends Activity {
@@ -31,15 +32,20 @@ public class MainActivity extends Activity {
   JSONArray remoteImageList;
   int remoteImageIndex = 0;
   private BroadcastReceiver receiverDownloadComplete;
+  private HashMap<Long, WallpaperItem> downloadingItems = new HashMap<>();
 
   private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       // TODO Auto-generated method stub
       // Get extra data included in the Intent
-      String message = intent.getStringExtra("message");
-      Log.d("receiver", "Got message: " + message);
-      adapter.addWallpaperItem(new WallpaperItem("file://" + message, "some title"));
+      String localUrl = "file://" + intent.getStringExtra("localUrl");
+      long downloadId = intent.getLongExtra("downloadId", 0);
+      Log.d("receiver", "Got message: " +  localUrl);
+      WallpaperItem downloadedWallpaperItem = downloadingItems.get(downloadId);
+      downloadedWallpaperItem.localFilePath = localUrl;
+      adapter.addWallpaperItem(downloadedWallpaperItem);
+      downloadingItems.remove(downloadId);
       adapter.notifyDataSetChanged();
     }
   };
@@ -112,9 +118,12 @@ public class MainActivity extends Activity {
       }
       try {
         ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
-        String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" +
-                remoteImageList.getJSONObject(remoteImageIndex).getString("filename");
-        imageDownloader.DownloadImage(downloadUrl);
+        JSONObject wallpaperJSONObject = remoteImageList.getJSONObject(remoteImageIndex);
+        String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" + wallpaperJSONObject.getString("filename");
+        long downloadId = imageDownloader.DownloadImage(downloadUrl);
+        downloadingItems.put(downloadId, new WallpaperItem(
+                wallpaperJSONObject.getString("title")
+        ));
         remoteImageIndex++;
 
       }
