@@ -8,11 +8,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/ivWallpaper"
         android:layout_gravity="center_horizontal" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/light_green"
-        android:id="@+id/tvTitle" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -28,14 +23,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
+                android:text="Title"
                 android:id="@+id/textView" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/textView2" />
+                android:text="(no title)"
+                android:id="@+id/tvTitle"/>
         </TableRow>
 
         <TableRow

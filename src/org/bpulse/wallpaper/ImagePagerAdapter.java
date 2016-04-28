@@ -2,6 +2,7 @@ package org.bpulse.wallpaper;
 
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
@@ -16,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +97,9 @@ public class ImagePagerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 WallpaperManager myWallpaperManager = WallpaperManager.getInstance(context);
                 try {
-                    myWallpaperManager.setResource(wallpaperItem.image);
+                  InputStream ins = new URL(wallpaperItem.localFilePath).openStream();
+                  myWallpaperManager.setStream(ins);
+
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
