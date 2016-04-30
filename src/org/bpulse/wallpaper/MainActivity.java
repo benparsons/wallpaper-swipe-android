@@ -42,11 +42,16 @@ public class MainActivity extends Activity {
       String localUrl = "file://" + intent.getStringExtra("localUrl");
       long downloadId = intent.getLongExtra("downloadId", 0);
       Log.d("receiver", "Got message: " +  localUrl);
-      WallpaperItem downloadedWallpaperItem = downloadingItems.get(downloadId);
-      downloadedWallpaperItem.localFilePath = localUrl;
-      adapter.addWallpaperItem(downloadedWallpaperItem);
-      downloadingItems.remove(downloadId);
-      adapter.notifyDataSetChanged();
+      try {
+        WallpaperItem downloadedWallpaperItem = downloadingItems.get(downloadId);
+        downloadedWallpaperItem.localFilePath = localUrl;
+        adapter.addWallpaperItem(downloadedWallpaperItem);
+        downloadingItems.remove(downloadId);
+        adapter.notifyDataSetChanged();
+      }
+      catch (Exception ex) {
+        Log.e("image-loading", ex.toString() + " " + ex.getMessage());
+      }
     }
   };
 
@@ -56,10 +61,16 @@ public class MainActivity extends Activity {
     super.onResume();
     IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
 
-    receiverDownloadComplete = new DownloadReceiver();
+    this.receiverDownloadComplete = new DownloadReceiver();
     registerReceiver(this.receiverDownloadComplete, intentFilter);
   }
 
+  @Override
+  public void onPause() {
+    super.onPause();
+
+    unregisterReceiver(this.receiverDownloadComplete);
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
