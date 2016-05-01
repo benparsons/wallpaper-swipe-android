@@ -6,7 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 //import android.database.Cursor;
 import android.database.Cursor;
+import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
+import android.util.Log;
+
+import java.io.*;
+import java.util.Arrays;
 
 /**
  * Created by benp on 26/04/2016.
@@ -42,10 +48,17 @@ public class DownloadReceiver extends BroadcastReceiver {
           String downloadedPackageUriString =
                   c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
 
+
+          String[] uriParts = downloadedPackageUriString.split("/");
+
+          String downloadedPackageUriString2 = moveFile(TextUtils.join("/", Arrays.copyOfRange(uriParts, 0, uriParts.length - 1)) + "/",
+                  uriParts[uriParts.length - 1],
+                  Environment.getExternalStorageDirectory().getAbsolutePath() + "/wallpaper/");
+
           //notify your app that download was completed
           //with local broadcast receiver
           Intent localReceiver = new Intent("file-ready");
-          localReceiver.putExtra("localUrl", downloadedPackageUriString);
+          localReceiver.putExtra("localUrl", downloadedPackageUriString2);
           localReceiver.putExtra("downloadId", downloadId);
           LocalBroadcastManager
                   .getInstance(context)
@@ -56,5 +69,49 @@ public class DownloadReceiver extends BroadcastReceiver {
         }
       }
     }
+  }
+
+  // taken from http://stackoverflow.com/a/11327789/384316
+  private String moveFile(String inputPath, String inputFile, String outputPath) {
+    InputStream in = null;
+    OutputStream out = null;
+    try {
+
+      //create output directory if it doesn't exist
+      File dir = new File (outputPath);
+      if (!dir.exists())
+      {
+        dir.mkdirs();
+      }
+
+
+      in = new FileInputStream(inputPath + inputFile);
+      out = new FileOutputStream(outputPath + inputFile);
+
+      byte[] buffer = new byte[1024];
+      int read;
+      while ((read = in.read(buffer)) != -1) {
+        out.write(buffer, 0, read);
+      }
+      in.close();
+      in = null;
+
+      // write the output file
+      out.flush();
+      out.close();
+      out = null;
+
+      return outputPath + inputFile;
+    }
+
+    catch (FileNotFoundException fnfe1) {
+      Log.e("tag", fnfe1.getMessage());
+    }
+    catch (Exception e) {
+      Log.e("tag", e.getMessage());
+    }
+
+    return "";
+
   }
 }
