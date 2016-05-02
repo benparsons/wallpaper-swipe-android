@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,9 +10,10 @@
         android:layout_gravity="center_horizontal" />
 
     <TableLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="bottom|center"
+        android:background="@color/dark_green"
         android:visibility="invisible"
         android:id="@+id/tableDetails">
 
@@ -24,13 +25,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:id="@+id/textView" />
+                android:id="@+id/tvTitleLabel" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(no title)"
                 android:id="@+id/tvTitle"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:id="@+id/tvUsernameLabel" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(no title)"
+                android:id="@+id/tvUsername"/>
         </TableRow>
 
         <TableRow
@@ -52,4 +70,4 @@
         </TableRow>
     </TableLayout>
 
-</LinearLayout>
+</FrameLayout>
