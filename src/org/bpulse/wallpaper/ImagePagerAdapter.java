@@ -48,7 +48,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Log.i("image-pager", "position:" +Integer.toString(position));
+        Log.d("image-pager", "position:" +Integer.toString(position));
 
         if (position > 10) {
             View view = inflater.inflate(R.layout.simple_text, null);
@@ -75,9 +75,8 @@ public class ImagePagerAdapter extends PagerAdapter {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ui", "image clicked");
                 TableLayout table = (TableLayout)wallpaperPage.findViewById(R.id.tableDetails);
-                table.setVisibility(View.VISIBLE);
+                table.setVisibility(table.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
             }
         });
         TextView textView = (TextView)wallpaperPage.findViewById(R.id.tvTitle);
@@ -111,7 +110,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        Log.i("image-pager", "destroy: " + Integer.toString(position));
+        Log.d("image-pager", "destroy: " + Integer.toString(position));
         ((ViewPager) container).removeView((LinearLayout) object);
     }
 }

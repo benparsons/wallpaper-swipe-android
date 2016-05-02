@@ -161,7 +161,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onPageScrollStateChanged(int i) {
-            Log.i("image-pager", "PageScrollStateChanged: " + Integer.toString(i));
+            Log.d("image-pager", "PageScrollStateChanged: " + Integer.toString(i));
 
         }
     };

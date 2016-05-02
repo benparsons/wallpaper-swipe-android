@@ -68,6 +68,7 @@ public class DownloadReceiver extends BroadcastReceiver {
           //I just delete my id from sqllite
         }
       }
+      c.close();
     }
   }
 
