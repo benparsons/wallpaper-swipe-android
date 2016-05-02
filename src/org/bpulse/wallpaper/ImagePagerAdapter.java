@@ -1,7 +1,9 @@
 package org.bpulse.wallpaper;
 
 import android.app.WallpaperManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
@@ -67,24 +69,51 @@ public class ImagePagerAdapter extends PagerAdapter {
         imageView.setImageResource(wallpaperItem.image);
       }
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TableLayout table = (TableLayout)wallpaperPage.findViewById(R.id.tableDetails);
-                table.setVisibility(table.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
-            }
-        });
-        TextView textView = (TextView)wallpaperPage.findViewById(R.id.tvTitle);
-        textView.setText(wallpaperItem.title);
-        textView.setTextColor(Color.RED);
+      imageView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              TableLayout table = (TableLayout)wallpaperPage.findViewById(R.id.tableDetails);
+              table.setVisibility(table.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+          }
+      });
+      TextView tvTitle = (TextView)wallpaperPage.findViewById(R.id.tvTitle);
+      tvTitle.setText(wallpaperItem.title);
 
-        enableSetWallpaperButton(wallpaperPage, wallpaperItem);
+      TextView tvUsername = (TextView)wallpaperPage.findViewById(R.id.tvUsername);
+      tvUsername.setText(wallpaperItem.username);
 
-        ((ViewPager) container).addView(wallpaperPage, 0);
-        return wallpaperPage;
+      TextView tvPhotographer = (TextView)wallpaperPage.findViewById(R.id.tvPhotographer);
+      tvPhotographer.setText(wallpaperItem.photographer);
+
+      enableOpenFlickrButton(wallpaperPage, wallpaperItem);
+
+      enableSetWallpaperButton(wallpaperPage, wallpaperItem);
+
+      ((ViewPager) container).addView(wallpaperPage, 0);
+      return wallpaperPage;
     }
 
-    private void enableSetWallpaperButton(View wallpaperPage, final WallpaperItem wallpaperItem) {
+  private void enableOpenFlickrButton(View wallpaperPage, final WallpaperItem wallpaperItem) {
+    Button btnFlickr = (Button)wallpaperPage.findViewById(R.id.btnFlickr);
+    btnFlickr.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW,wallpaperItem.photoPage);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.android.chrome");
+        try {
+          context.startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+          // Chrome browser presumably not installed so allow user to choose instead
+          intent.setPackage(null);
+          context.startActivity(intent);
+        }
+      }
+    });
+  }
+
+  private void enableSetWallpaperButton(View wallpaperPage, final WallpaperItem wallpaperItem) {
         Button btnSetWallpaper = (Button)wallpaperPage.findViewById(R.id.btnSetWallpaper);
         btnSetWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override

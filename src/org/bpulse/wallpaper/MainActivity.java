@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,6 +18,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -128,7 +131,10 @@ public class MainActivity extends Activity {
         String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" + wallpaperJSONObject.getString("filename");
         long downloadId = imageDownloader.DownloadImage(downloadUrl);
         downloadingItems.put(downloadId, new WallpaperItem(
-                wallpaperJSONObject.getString("title")
+                wallpaperJSONObject.getString("title"),
+                wallpaperJSONObject.getString("ownerrealname"),
+                wallpaperJSONObject.getString("ownerusername"),
+                Uri.parse(wallpaperJSONObject.getString("photo_page_url"))
         ));
         remoteImageIndex++;
 
