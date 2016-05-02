@@ -59,10 +59,6 @@ public class ImagePagerAdapter extends PagerAdapter {
         final View wallpaperPage = inflater.inflate(R.layout.wallpaper_page, null);
         ImageView imageView = (ImageView)wallpaperPage.findViewById(R.id.ivWallpaper);
 
-        int padding = context.getResources().getDimensionPixelSize(
-                R.dimen.padding_medium);
-        imageView.setPadding(padding, padding, padding, padding);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         final WallpaperItem wallpaperItem = mImages2.get(position);
 
       if (wallpaperItem.localFilePath != null) {

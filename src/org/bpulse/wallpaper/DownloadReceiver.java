@@ -48,7 +48,6 @@ public class DownloadReceiver extends BroadcastReceiver {
           String downloadedPackageUriString =
                   c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
 
-
           String[] uriParts = downloadedPackageUriString.split("/");
 
           String downloadedPackageUriString2 = moveFile(TextUtils.join("/", Arrays.copyOfRange(uriParts, 0, uriParts.length - 1)) + "/",
