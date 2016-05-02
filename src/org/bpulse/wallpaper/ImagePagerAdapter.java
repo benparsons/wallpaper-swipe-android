@@ -2,7 +2,6 @@ package org.bpulse.wallpaper;
 
 import android.app.WallpaperManager;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
@@ -51,7 +50,7 @@ public class ImagePagerAdapter extends PagerAdapter {
         Log.d("image-pager", "position:" +Integer.toString(position));
 
         if (position > 10) {
-            View view = inflater.inflate(R.layout.simple_text, null);
+            View view = inflater.inflate(R.layout.native_ad_page, null);
             ((ViewPager) container).addView(view, 0);
             return view;
         }
