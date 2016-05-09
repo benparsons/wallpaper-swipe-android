@@ -15,6 +15,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
+import com.facebook.ads.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements InterstitialAdListener {
   ImagePagerAdapter adapter;
   ViewPager viewPager;
   final String URL_ROOT = "https://s3-eu-west-1.amazonaws.com/flickrwall/";
@@ -31,6 +33,7 @@ public class MainActivity extends Activity {
   int remoteImageIndex = 0;
   private BroadcastReceiver receiverDownloadComplete;
   private HashMap<Long, WallpaperItem> downloadingItems = new HashMap<>();
+  Boolean interstitialShown = false;
 
   private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
     @Override
@@ -46,6 +49,10 @@ public class MainActivity extends Activity {
         adapter.addWallpaperItem(downloadedWallpaperItem);
         downloadingItems.remove(downloadId);
         adapter.notifyDataSetChanged();
+
+        if (! interstitialShown) {
+          loadInterstitialAd();
+        }
       }
       catch (Exception ex) {
         Log.e("image-loading", ex.toString() + " " + ex.getMessage());
@@ -80,12 +87,6 @@ public class MainActivity extends Activity {
     Log.i("start", "start");
     adapter = new ImagePagerAdapter(MainActivity.this);
 
-    //adapter.addWallpaperItem(new WallpaperItem(R.drawable.ulm, "ulm"));
-    //adapter.addWallpaperItem(new WallpaperItem(R.drawable.chiang_mai, "chiang mai"));
-    //adapter.addWallpaperItem(new WallpaperItem(R.drawable.himeji, "himeji"));
-    //adapter.addWallpaperItem(new WallpaperItem(R.drawable.petronas_twin_tower, "petronas_twin_tower"));
-    //setContentView(R.layout.activity_main);
-
     viewPager = new ViewPager(this);
     viewPager.setId(R.id.view_pager);
 
@@ -94,23 +95,24 @@ public class MainActivity extends Activity {
     viewPager.setAdapter(adapter);
     viewPager.setOnPageChangeListener(listener);
 
-    getNewImageList();
-    downloadImages(3);
-
+    if (getNewImageList()) {
+      downloadImages(3);
+    }
   }
 
-  private void getNewImageList() {
+  private Boolean getNewImageList() {
     try {
       String url = "https://safe-fjord-67306.herokuapp.com/client-api/get-full-image-list";
-      //String url = "http://localhost:4000/sample.json";
-      //String url = "http://jsonplaceholder.typicode.com/users";
       remoteImageList = new GetJsonTask().execute(url).get();
 
       Log.i("json", remoteImageList.toString());
+
+      return true;
     }
     catch(Exception e)
     {
       e.printStackTrace();
+      return false;
     }
   }
 
@@ -166,4 +168,47 @@ public class MainActivity extends Activity {
 
         }
     };
+
+
+
+  private InterstitialAd interstitialAd;
+
+  private void loadInterstitialAd(){
+    Log.i("ads", "loadInterstitialAd called");
+
+    // test device
+    AdSettings.addTestDevice("a9ad04769af2533098efea8a105e0882");
+
+    interstitialAd = new InterstitialAd(this, "1507746186203265_1507798849531332");
+    interstitialAd.setAdListener(MainActivity.this);
+    interstitialAd.loadAd();
+    Log.i("ads", "loadInterstitialAd finished");
+
+  }
+
+  @Override
+  public void onInterstitialDisplayed(Ad ad) {
+    interstitialShown = true;
+  }
+
+  @Override
+  public void onInterstitialDismissed(Ad ad) {
+
+  }
+
+  @Override
+  public void onError(Ad ad, AdError adError) {
+
+  }
+
+  @Override
+  public void onAdLoaded(Ad ad) {
+    Log.i("ads", "onAdLoaded called");
+    interstitialAd.show();
+  }
+
+  @Override
+  public void onAdClicked(Ad ad) {
+
+  }
 }
