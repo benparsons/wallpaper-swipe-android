@@ -99,7 +99,7 @@ public class ImagePagerAdapter extends PagerAdapter {
       @Override
       public void onClick(View v) {
 
-        Intent intent = new Intent(Intent.ACTION_VIEW,wallpaperItem.photoPage);
+        Intent intent = new Intent(Intent.ACTION_VIEW,wallpaperItem.getPhotoPage());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setPackage("com.android.chrome");
         try {

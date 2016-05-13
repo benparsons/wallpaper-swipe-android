@@ -47,6 +47,9 @@ public class MainActivity extends Activity implements InterstitialAdListener {
         WallpaperItem downloadedWallpaperItem = downloadingItems.get(downloadId);
         downloadedWallpaperItem.localFilePath = localUrl;
         adapter.addWallpaperItem(downloadedWallpaperItem);
+
+        getSharedPreferences("flickrwall", MODE_PRIVATE).edit().putStringSet
+                (downloadedWallpaperItem.id, downloadedWallpaperItem.toStringSet());
         downloadingItems.remove(downloadId);
         adapter.notifyDataSetChanged();
 
@@ -133,10 +136,10 @@ public class MainActivity extends Activity implements InterstitialAdListener {
         String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" + wallpaperJSONObject.getString("filename");
         long downloadId = imageDownloader.DownloadImage(downloadUrl);
         downloadingItems.put(downloadId, new WallpaperItem(
+                wallpaperJSONObject.getString("id"),
                 wallpaperJSONObject.getString("title"),
                 wallpaperJSONObject.getString("ownerrealname"),
-                wallpaperJSONObject.getString("ownerusername"),
-                Uri.parse(wallpaperJSONObject.getString("photo_page_url"))
+                wallpaperJSONObject.getString("ownerusername")
         ));
         remoteImageIndex++;
 
