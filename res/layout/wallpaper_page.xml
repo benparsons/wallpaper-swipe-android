@@ -35,14 +35,16 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:id="@+id/trPhotographerRow">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:text="Photographer"
+                android:paddingRight="10dp"
                 android:id="@+id/tvPhotographerLabel" />
 
             <TextView
@@ -60,7 +62,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username"
+                android:text="Photographer"
                 android:id="@+id/tvUsernameLabel" />
 
             <TextView
@@ -79,13 +81,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Open on Flickr"
-                android:id="@+id/btnFlickr" />
+                android:id="@+id/btnFlickr"
+                android:minHeight="1dp" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Set Wallpaper"
-                android:id="@+id/btnSetWallpaper" />
+                android:id="@+id/btnSetWallpaper"
+                android:minHeight="1dp" />
         </TableRow>
     </TableLayout>
 
