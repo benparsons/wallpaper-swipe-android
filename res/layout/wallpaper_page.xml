@@ -14,30 +14,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:background="@color/dark_green"
+        android:background="@color/grey"
         android:visibility="invisible"
-        android:id="@+id/tableDetails">
+        android:id="@+id/tableDetails"
+        android:shrinkColumns="0">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:id="@+id/tvTitleLabel" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(no title)"
-                android:id="@+id/tvTitle"/>
+                android:id="@+id/tvTitle"
+                android:ellipsize="none"
+                android:maxLines="100"
+                android:scrollHorizontally="false"
+                android:layout_span="2" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/trPhotographerRow">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,7 +53,8 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/trUsernameRow">
 
             <TextView
                 android:layout_width="wrap_content"
