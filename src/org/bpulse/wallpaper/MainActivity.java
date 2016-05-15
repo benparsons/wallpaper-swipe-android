@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,10 +21,8 @@ import com.facebook.ads.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 
 public class MainActivity extends Activity implements InterstitialAdListener {
   ImagePagerAdapter adapter;
@@ -34,6 +33,9 @@ public class MainActivity extends Activity implements InterstitialAdListener {
   private BroadcastReceiver receiverDownloadComplete;
   private HashMap<Long, WallpaperItem> downloadingItems = new HashMap<>();
   Boolean interstitialShown = false;
+
+  SharedPreferences sharedPrefs;
+  SharedPreferences.Editor sharedPrefsEditor;
 
   private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
     @Override
@@ -47,11 +49,14 @@ public class MainActivity extends Activity implements InterstitialAdListener {
         WallpaperItem downloadedWallpaperItem = downloadingItems.get(downloadId);
         downloadedWallpaperItem.localFilePath = localUrl;
         adapter.addWallpaperItem(downloadedWallpaperItem);
-
-        getSharedPreferences("flickrwall", MODE_PRIVATE).edit().putStringSet
-                (downloadedWallpaperItem.id, downloadedWallpaperItem.toStringSet());
-        downloadingItems.remove(downloadId);
         adapter.notifyDataSetChanged();
+
+        sharedPrefsEditor.putString(downloadedWallpaperItem.id, downloadedWallpaperItem.toString());
+        HashSet<String> savedIds = getSavedIds();
+        savedIds.add(downloadedWallpaperItem.id);
+        sharedPrefsEditor.putStringSet("idlist", savedIds);
+        sharedPrefsEditor.commit();
+        downloadingItems.remove(downloadId);
 
         if (! interstitialShown) {
           loadInterstitialAd();
@@ -98,9 +103,24 @@ public class MainActivity extends Activity implements InterstitialAdListener {
     viewPager.setAdapter(adapter);
     viewPager.setOnPageChangeListener(listener);
 
+    sharedPrefs = getSharedPreferences("flickrwall", MODE_PRIVATE);
+    sharedPrefsEditor = sharedPrefs.edit();
+
+    loadFromSharedPreferences();
+
     if (getNewImageList()) {
       downloadImages(3);
     }
+  }
+
+  private void loadFromSharedPreferences() {
+    HashSet<String> savedIds = getSavedIds();
+    for (String s : savedIds) {
+      WallpaperItem  wallpaperItem = WallpaperItem.Parse(sharedPrefs.getString(s, ""));
+      adapter.addWallpaperItem(wallpaperItem);
+      adapter.notifyDataSetChanged();
+    }
+
   }
 
   private Boolean getNewImageList() {
@@ -133,6 +153,14 @@ public class MainActivity extends Activity implements InterstitialAdListener {
       try {
         ImageDownloader imageDownloader = new ImageDownloader(MainActivity.this);
         JSONObject wallpaperJSONObject = remoteImageList.getJSONObject(remoteImageIndex);
+
+        HashSet<String> savedIds = getSavedIds();
+        if (savedIds.contains(wallpaperJSONObject.getString("id"))) {
+          Log.i("image-loading", "This id is already loaded: " + wallpaperJSONObject.getString("id") + ", trying next.");
+          remoteImageIndex++;
+          return;
+        }
+
         String downloadUrl = "https://s3-eu-west-1.amazonaws.com/flickrwall/" + wallpaperJSONObject.getString("filename");
         long downloadId = imageDownloader.DownloadImage(downloadUrl);
         downloadingItems.put(downloadId, new WallpaperItem(
@@ -149,6 +177,10 @@ public class MainActivity extends Activity implements InterstitialAdListener {
         e.printStackTrace();
       }
     }
+  }
+
+  private HashSet<String> getSavedIds() {
+    return (HashSet<String>)sharedPrefs.getStringSet("idlist", new HashSet<String>());
   }
 
 
@@ -181,6 +213,7 @@ public class MainActivity extends Activity implements InterstitialAdListener {
 
     // test device
     AdSettings.addTestDevice("a9ad04769af2533098efea8a105e0882");
+    AdSettings.addTestDevice("da2494b357f7d84a37b2f383f3d33c14");
 
     interstitialAd = new InterstitialAd(this, "1507746186203265_1507798849531332");
     interstitialAd.setAdListener(MainActivity.this);
