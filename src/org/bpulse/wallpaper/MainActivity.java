@@ -167,7 +167,8 @@ public class MainActivity extends Activity implements InterstitialAdListener {
                 wallpaperJSONObject.getString("id"),
                 wallpaperJSONObject.getString("title"),
                 wallpaperJSONObject.getString("ownerrealname"),
-                wallpaperJSONObject.getString("ownerusername")
+                wallpaperJSONObject.getString("ownerusername"),
+                wallpaperJSONObject.getString("photo_page_url")
         ));
         remoteImageIndex++;
 

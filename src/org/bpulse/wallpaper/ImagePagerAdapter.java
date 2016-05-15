@@ -79,15 +79,17 @@ public class ImagePagerAdapter extends PagerAdapter {
       TextView tvTitle = (TextView)wallpaperPage.findViewById(R.id.tvTitle);
       tvTitle.setText(wallpaperItem.title);
 
-      TextView tvUsername = (TextView)wallpaperPage.findViewById(R.id.tvUsername);
-      tvUsername.setText(wallpaperItem.username);
-
       if (wallpaperItem.photographer != null && wallpaperItem.photographer.length() > 0) {
         TextView tvPhotographer = (TextView) wallpaperPage.findViewById(R.id.tvPhotographer);
         tvPhotographer.setText(wallpaperItem.photographer);
+
+        wallpaperPage.findViewById(R.id.trUsernameRow).setVisibility(View.GONE);
       }
       else {
         wallpaperPage.findViewById(R.id.trPhotographerRow).setVisibility(View.GONE);
+
+        TextView tvUsername = (TextView)wallpaperPage.findViewById(R.id.tvUsername);
+        tvUsername.setText(wallpaperItem.username);
       }
       enableOpenFlickrButton(wallpaperPage, wallpaperItem);
 
