@@ -79,20 +79,28 @@ public class ImagePagerAdapter extends PagerAdapter {
             }
 
             String titleForAd = nativeAd.getAdTitle();
-            NativeAd.Image coverImage = nativeAd.getAdCoverImage();
-            NativeAd.Image iconForAd = nativeAd.getAdIcon();
             String socialContextForAd = nativeAd.getAdSocialContext();
             String titleForAdButton = nativeAd.getAdCallToAction();
             String textForAdBody = nativeAd.getAdBody();
 
+            // title
             TextView tvTitle = (TextView) nativeAdPage.findViewById(R.id.tvAdTitle);
             tvTitle.setText(titleForAd);
 
+            // Ad body
+            TextView nativeAdBody = (TextView)nativeAdPage.findViewById(R.id.native_ad_body);
+            nativeAdBody.setText(textForAdBody);
+
+            // Downloading and setting the ad icon.
+            ImageView nativeAdIcon = (ImageView)nativeAdPage.findViewById(R.id.native_ad_icon);
+            NativeAd.Image adIcon = nativeAd.getAdIcon();
+            NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
+
             // Download and setting the cover image.
             MediaView nativeAdMedia = (MediaView)nativeAdPage.findViewById(R.id.native_ad_media);
-            NativeAd.Image adCoverImage = nativeAd.getAdCoverImage();
             nativeAdMedia.setNativeAd(nativeAd);
 
+            // AdChoices
             AdChoicesView adChoicesView = new AdChoicesView(context, nativeAd, true);
             ((LinearLayout)nativeAdPage.findViewById(R.id.llTopLine)).addView(adChoicesView, 0);
           }
