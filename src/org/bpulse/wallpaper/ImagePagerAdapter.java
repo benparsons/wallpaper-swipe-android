@@ -14,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.facebook.ads.Ad;
+import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdListener;
 import com.facebook.ads.MediaView;
@@ -91,7 +93,8 @@ public class ImagePagerAdapter extends PagerAdapter {
             NativeAd.Image adCoverImage = nativeAd.getAdCoverImage();
             nativeAdMedia.setNativeAd(nativeAd);
 
-
+            AdChoicesView adChoicesView = new AdChoicesView(context, nativeAd, true);
+            ((LinearLayout)nativeAdPage.findViewById(R.id.llTopLine)).addView(adChoicesView, 0);
           }
 
           @Override
