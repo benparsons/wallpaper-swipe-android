@@ -4,7 +4,6 @@ import android.app.WallpaperManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,6 +26,7 @@ public class ImagePagerAdapter extends PagerAdapter {
     Context context;
     LayoutInflater inflater;
     private List<WallpaperItem> mImages2 = new ArrayList<>();
+  private AdPageLocations adPageLocations = new AdPageLocations();
 
     public ImagePagerAdapter(Context _context) {
         context = _context;
@@ -49,18 +49,25 @@ public class ImagePagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Log.d("image-pager", "position:" +Integer.toString(position));
+      Log.d("image-pager", "position:" +Integer.toString(position));
 
-        if (position > 10) {
-            View view = inflater.inflate(R.layout.native_ad_page, null);
-            ((ViewPager) container).addView(view, 0);
-            return view;
+      if (adPageLocations.SpecificPages.contains(position)) {
+          View view = inflater.inflate(R.layout.native_ad_page, null);
+          ((ViewPager) container).addView(view, 0);
+          return view;
+      }
+
+      int realPosition = 0;
+      for (int i = 0; i < position; i++){
+        if (! adPageLocations.SpecificPages.contains(i)) {
+          realPosition++;
         }
+      }
 
-        final View wallpaperPage = inflater.inflate(R.layout.wallpaper_page, null);
-        ImageView imageView = (ImageView)wallpaperPage.findViewById(R.id.ivWallpaper);
+      final View wallpaperPage = inflater.inflate(R.layout.wallpaper_page, null);
+      ImageView imageView = (ImageView)wallpaperPage.findViewById(R.id.ivWallpaper);
 
-        final WallpaperItem wallpaperItem = mImages2.get(position);
+      final WallpaperItem wallpaperItem = mImages2.get(realPosition);
 
       if (wallpaperItem.localFilePath != null) {
         imageView.setImageURI(Uri.parse(wallpaperItem.localFilePath));

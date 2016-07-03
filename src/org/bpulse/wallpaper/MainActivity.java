@@ -200,7 +200,7 @@ public class MainActivity extends Activity implements InterstitialAdListener {
 
         @Override
         public void onPageScrollStateChanged(int i) {
-            Log.d("image-pager", "PageScrollStateChanged: " + Integer.toString(i));
+            //Log.d("image-pager", "PageScrollStateChanged: " + Integer.toString(i));
 
         }
     };
