@@ -17,16 +17,24 @@ import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.MediaView;
+import com.facebook.ads.NativeAd;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImagePagerAdapter extends PagerAdapter {
-    Context context;
-    LayoutInflater inflater;
-    private List<WallpaperItem> mImages2 = new ArrayList<>();
+  Context context;
+  LayoutInflater inflater;
+  private List<WallpaperItem> mImages2 = new ArrayList<>();
   private AdPageLocations adPageLocations = new AdPageLocations();
+
+  private NativeAd nativeAd;
 
     public ImagePagerAdapter(Context _context) {
         context = _context;
@@ -52,9 +60,49 @@ public class ImagePagerAdapter extends PagerAdapter {
       Log.d("image-pager", "position:" +Integer.toString(position));
 
       if (adPageLocations.SpecificPages.contains(position)) {
-          View view = inflater.inflate(R.layout.native_ad_page, null);
-          ((ViewPager) container).addView(view, 0);
-          return view;
+
+        final View nativeAdPage = inflater.inflate(R.layout.native_ad_page, null);
+
+        nativeAd = new NativeAd(context, "288062771531358_288063254864643");
+        nativeAd.setAdListener(new AdListener() {
+          @Override
+          public void onError(Ad ad, AdError adError) {
+
+          }
+
+          @Override
+          public void onAdLoaded(Ad ad) {
+            if (ad != nativeAd) {
+              return;
+            }
+
+            String titleForAd = nativeAd.getAdTitle();
+            NativeAd.Image coverImage = nativeAd.getAdCoverImage();
+            NativeAd.Image iconForAd = nativeAd.getAdIcon();
+            String socialContextForAd = nativeAd.getAdSocialContext();
+            String titleForAdButton = nativeAd.getAdCallToAction();
+            String textForAdBody = nativeAd.getAdBody();
+
+            TextView tvTitle = (TextView) nativeAdPage.findViewById(R.id.tvAdTitle);
+            tvTitle.setText(titleForAd);
+
+            // Download and setting the cover image.
+            MediaView nativeAdMedia = (MediaView)nativeAdPage.findViewById(R.id.native_ad_media);
+            NativeAd.Image adCoverImage = nativeAd.getAdCoverImage();
+            nativeAdMedia.setNativeAd(nativeAd);
+
+
+          }
+
+          @Override
+          public void onAdClicked(Ad ad) {
+
+          }
+        });
+        nativeAd.loadAd();
+
+        ((ViewPager) container).addView(nativeAdPage, 0);
+        return nativeAdPage;
       }
 
       int realPosition = 0;

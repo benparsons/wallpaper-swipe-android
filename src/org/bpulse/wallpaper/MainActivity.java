@@ -76,6 +76,12 @@ public class MainActivity extends Activity implements InterstitialAdListener {
 
     this.receiverDownloadComplete = new DownloadReceiver();
     registerReceiver(this.receiverDownloadComplete, intentFilter);
+
+
+    // test device
+    AdSettings.addTestDevice("a9ad04769af2533098efea8a105e0882");
+    AdSettings.addTestDevice("da2494b357f7d84a37b2f383f3d33c14");
+    AdSettings.addTestDevice("f7457aa5dc8312f9e39ff42a35b05ea0");
   }
 
   @Override
@@ -212,11 +218,8 @@ public class MainActivity extends Activity implements InterstitialAdListener {
   private void loadInterstitialAd(){
     Log.i("ads", "loadInterstitialAd called");
 
-    // test device
-    AdSettings.addTestDevice("a9ad04769af2533098efea8a105e0882");
-    AdSettings.addTestDevice("da2494b357f7d84a37b2f383f3d33c14");
 
-    interstitialAd = new InterstitialAd(this, "1507746186203265_1507798849531332");
+    interstitialAd = new InterstitialAd(this, "288062771531358_288064571531178");
     interstitialAd.setAdListener(MainActivity.this);
     interstitialAd.loadAd();
     Log.i("ads", "loadInterstitialAd finished");
